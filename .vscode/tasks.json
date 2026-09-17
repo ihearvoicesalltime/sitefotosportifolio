@@ -1,0 +1,285 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install and build portfolio",
+			"type": "shell",
+			"command": "npm install; npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build portfolio after fix",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run final production build",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify production build",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Audit production dependencies",
+			"type": "shell",
+			"command": "npm audit --omit=dev",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check stable framework versions",
+			"type": "shell",
+			"command": "npm view next version; npm view postcss version; npm view @supabase/ssr version",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect framework requirements",
+			"type": "shell",
+			"command": "npm view next@16.3.5 engines peerDependencies --json",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Update vulnerable dependencies",
+			"type": "shell",
+			"command": "npm install next@16.3.5 postcss@8.5.28",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build updated portfolio",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Final build and audit",
+			"type": "shell",
+			"command": "npm run build; npm audit --omit=dev",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Supabase integration",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Validate SQL integration build",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build admin UUID authorization",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Update Supabase SSR package",
+			"type": "shell",
+			"command": "npm install @supabase/supabase-js @supabase/ssr; npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify Supabase package versions",
+			"type": "shell",
+			"command": "npm ls @supabase/ssr @supabase/supabase-js --depth=0; npm audit --omit=dev",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Upgrade Supabase SSR",
+			"type": "shell",
+			"command": "npm install @supabase/ssr@latest; npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build auth callback fix",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run portfolio development server",
+			"type": "shell",
+			"command": "npm run dev",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check running portfolio",
+			"type": "shell",
+			"command": "$r = Invoke-WebRequest -Uri 'http://localhost:3000/admin/login' -UseBasicParsing; Write-Output ('HTTP ' + [int]$r.StatusCode); Write-Output ('Login page bytes: ' + $r.Content.Length)",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check auth callback route",
+			"type": "shell",
+			"command": "try { Invoke-WebRequest -Uri 'http://localhost:3000/auth/callback' -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop | Out-Null } catch { if ($_.Exception.Response) { Write-Output ('HTTP ' + [int]$_.Exception.Response.StatusCode); Write-Output ('Location ' + $_.Exception.Response.Headers['Location']) } else { throw } }",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Deploy portfolio to Vercel",
+			"type": "shell",
+			"command": "npx vercel",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Start Vercel deployment",
+			"type": "shell",
+			"command": "npx --yes vercel",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Authenticate Vercel CLI",
+			"type": "shell",
+			"command": "npx --yes vercel login",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Deploy site to Vercel",
+			"type": "shell",
+			"command": "npx --yes vercel --yes",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Configure Vercel environment",
+			"type": "shell",
+			"command": "'https://weaueiulvzzcjvdnoglj.supabase.co' | npx --yes vercel env add NEXT_PUBLIC_SUPABASE_URL production; 'sb_publishable_8RohPCwQv01_oE5-jYsbeA_wwWYWroD' | npx --yes vercel env add NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY production; 'https://sitefotosportifolio.vercel.app' | npx --yes vercel env add NEXT_PUBLIC_SITE_URL production",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Redeploy with environment",
+			"type": "shell",
+			"command": "npx --yes vercel --prod --yes",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify public deployment",
+			"type": "shell",
+			"command": "$home = Invoke-WebRequest -Uri 'https://sitefotosportifolio.vercel.app' -UseBasicParsing; $login = Invoke-WebRequest -Uri 'https://sitefotosportifolio.vercel.app/admin/login' -UseBasicParsing; Write-Output ('Home HTTP ' + [int]$home.StatusCode); Write-Output ('Login HTTP ' + [int]$login.StatusCode); Write-Output ('Home bytes ' + $home.Content.Length)",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Inspect Vercel runtime error",
+			"type": "shell",
+			"command": "npx --yes vercel inspect https://sitefotosportifolio-k66jbzljl-fotoportifolio.vercel.app --logs",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify production routes",
+			"type": "shell",
+			"command": "try { $publicResponse = Invoke-WebRequest -Uri 'https://sitefotosportifolio.vercel.app' -UseBasicParsing -ErrorAction Stop; Write-Output ('Home HTTP ' + [int]$publicResponse.StatusCode) } catch { Write-Output ('Home error: ' + $_.Exception.Message) }; try { $loginResponse = Invoke-WebRequest -Uri 'https://sitefotosportifolio.vercel.app/admin/login' -UseBasicParsing -ErrorAction Stop; Write-Output ('Login HTTP ' + [int]$loginResponse.StatusCode) } catch { Write-Output ('Login error: ' + $_.Exception.Message) }",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify callback production route",
+			"type": "shell",
+			"command": "try { Invoke-WebRequest -Uri 'https://sitefotosportifolio.vercel.app/auth/callback' -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop | Out-Null; Write-Output 'Unexpected success' } catch { if ($_.Exception.Response) { Write-Output ('Callback HTTP ' + [int]$_.Exception.Response.StatusCode.value__); Write-Output ('Callback location ' + $_.Exception.Response.Headers['Location']) } else { Write-Output $_.Exception.Message } }",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build localized dark portfolio",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish visual redesign",
+			"type": "shell",
+			"command": "npx --yes vercel --prod --yes",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify redesigned website",
+			"type": "shell",
+			"command": "$publicResponse = Invoke-WebRequest -Uri 'https://sitefotosportifolio.vercel.app' -UseBasicParsing; $loginResponse = Invoke-WebRequest -Uri 'https://sitefotosportifolio.vercel.app/admin/login' -UseBasicParsing; Write-Output ('Home HTTP ' + [int]$publicResponse.StatusCode); Write-Output ('Login HTTP ' + [int]$loginResponse.StatusCode); Write-Output ('Contains Projetos em Destaque: ' + $publicResponse.Content.Contains('Projetos em Destaque')); Write-Output ('Contains Bem-vindo: ' + $loginResponse.Content.Contains('Bem-vindo de volta.'))",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build password authentication",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build restored magic link",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check GitHub repository setup",
+			"type": "shell",
+			"command": "Write-Output ('Git: ' + (Get-Command git -ErrorAction SilentlyContinue).Source); Write-Output ('GitHub CLI: ' + (Get-Command gh -ErrorAction SilentlyContinue).Source); if (Test-Path .git) { git status --short; git remote -v; git branch --show-current } else { Write-Output 'No .git directory' }; Write-Output ('env.local exists: ' + (Test-Path .env.local)); Write-Output ('env.local ignored rule: ' + ((Get-Content .gitignore) -contains '.env.local'))",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Initialize local Git repository",
+			"type": "shell",
+			"command": "$git = 'C:\\Program Files\\Git\\cmd\\git.exe'; & $git init; & $git config user.name; & $git config user.email; & $git status --short; Write-Output ('env.local ignored: ' + ((& $git check-ignore .env.local) -eq '.env.local'))",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Commit and push portfolio",
+			"type": "shell",
+			"command": "$git = 'C:\\Program Files\\Git\\cmd\\git.exe'; & $git config user.name 'ihearvoicesalltime'; & $git config user.email 'ihearvoicesalltime@users.noreply.github.com'; & $git add .; & $git status --short; & $git commit -m \"Initial photography portfolio\"; & $git branch -M main; & $git remote add origin 'https://github.com/ihearvoicesalltime/sitefotosportifolio.git'; & $git push -u origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Finish GitHub push",
+			"type": "shell",
+			"command": "$git = 'C:\\Program Files\\Git\\cmd\\git.exe'; & $git commit -m 'Initial-portfolio'; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & $git branch -M main; & $git push -u origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Push project to GitHub",
+			"type": "shell",
+			"command": "$git = 'C:\\Program Files\\Git\\cmd\\git.exe'; & $git remote -v; & $git status --short; & $git push -u origin main",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
