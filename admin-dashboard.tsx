@@ -1,0 +1,20 @@
+"use client";
+import { useRef, useState } from "react";
+import { LogOut, Trash2, Upload } from "lucide-react";
+import { browserSupabase } from "@/lib/supabase-browser";
+import type { Photo } from "@/lib/types";
+export default function AdminDashboard({ initialPhotos }: { initialPhotos: Photo[] }) {
+  const [photos, setPhotos] = useState(initialPhotos); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false); const fileRef = useRef<HTMLInputElement>(null);
+  async function upload() {
+    const file = fileRef.current?.files?.[0]; if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 10 * 1024 * 1024) { setStatus("Use uma imagem JPG, PNG ou WebP de até 10 MB."); return; }
+    setBusy(true); setStatus("Enviando…"); const supabase = browserSupabase(); const path = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "-")}`;
+    const { error: storageError } = await supabase.storage.from("photos").upload(path, file, { contentType: file.type, upsert: false });
+    if (storageError) { setStatus(storageError.message); setBusy(false); return; }
+    const { data: { publicUrl } } = supabase.storage.from("photos").getPublicUrl(path);
+    const { data, error } = await supabase.from("photos").insert({ title: file.name.replace(/\.[^.]+$/, ""), category: "New work", image_url: publicUrl, storage_path: path }).select().single();
+    setBusy(false); if (error) { await supabase.storage.from("photos").remove([path]); setStatus(error.message); return; } setPhotos([data, ...photos]); setStatus("Imagem publicada."); if (fileRef.current) fileRef.current.value = "";
+  }
+  async function remove(photo: Photo) { if (!confirm(`Delete “${photo.title}”?`)) return; const supabase = browserSupabase(); const { error } = await supabase.from("photos").delete().eq("id", photo.id); if (!error && photo.storage_path) await supabase.storage.from("photos").remove([photo.storage_path]); if (!error) setPhotos(photos.filter(p => p.id !== photo.id)); else setStatus(error.message); }
+  return <main className="min-h-screen"><header className="glass-header sticky top-0 z-10 flex items-center justify-between border-b px-6 py-6 md:px-10"><a href="/" className="font-display text-2xl">Lumen<span className="text-rust">.</span></a><div className="flex items-center gap-5 text-sm"><span className="hidden text-mist sm:inline">Painel do estúdio</span><button onClick={() => browserSupabase().auth.signOut().then(() => location.href = "/admin/login")} aria-label="Sair" className="text-mist hover:text-white"><LogOut size={18}/></button></div></header><div className="mx-auto max-w-7xl px-6 py-12 md:px-10"><div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="text-xs uppercase tracking-widest text-rust">Acervo privado</p><h1 className="mt-3 font-display text-5xl">Seu trabalho.</h1></div><label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-rust px-5 py-3 text-sm text-white hover:opacity-85"><Upload size={16}/> Escolher imagem<input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={upload} /></label></div>{status && <p role="status" className="mt-6 text-sm text-rust">{status}</p>}<div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{photos.map(p => <article key={p.id} className="group"><div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-graphite shadow-2xl shadow-black/40"><img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><button onClick={() => remove(p)} aria-label={`Excluir ${p.title}`} className="absolute right-3 top-3 rounded-full bg-black/75 p-2 text-white opacity-0 transition hover:bg-rust group-hover:opacity-100"><Trash2 size={16}/></button></div><p className="mt-3 text-sm">{p.title}</p><p className="text-xs text-mist">{p.category}</p></article>)}</div>{!photos.length && <p className="mt-24 text-center text-mist">Nenhuma imagem ainda. Envie seu primeiro trabalho.</p>}</div></main>;
+}
